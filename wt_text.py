@@ -58,22 +58,24 @@ def word_fre_get(textIn,res_text):
     '''
     字典 词频 统计
     '''
-    fmtStr = re.compile(r'[,\.、?!@<>&%$#，。？！@#￥%&-—+~《》（）]')
-    fmtStr = re.compile(r'[,.、?!@<>&%$#，。？！@#￥%&—~《》（）\*]')
+    fmtStr = re.compile(r'[,、?!@<>&%$#，。？！@#￥%&~《》（）]')
+    # fmtStr = re.compile(r'[!]')
 
     # fmtStr = re.compile(r'[？]')
-
-    
     word_fre_dict = {}
     cnt = 1
     # stopNum = 100
     stopNum = -1
-    with open(textIn,'r+',encoding='utf-8') as ff:
+    logStr = '0000'
+    # with open(textIn,'r+',encoding='utf-8') as ff:
+    with codecs.open(textIn,'r+','utf-8') as ff:
         line = ff.readline().strip()
-        line = ' '.join(line.split('\t')[2:])
+        # line = ' '.join(line.split('\t')[2:])
+        print(line,'----')
         while line:
             line = fmtStr.sub('',line.upper())
             cur_word_list = get_word_list(line)
+            # print(cnt,line)
             if len(cur_word_list) == 0:
                 continue
             for word in cur_word_list:
@@ -81,7 +83,7 @@ def word_fre_get(textIn,res_text):
                     word_fre_dict[word] = 1
                 else:
                     word_fre_dict[word] = word_fre_dict[word] + 1
-            if str(cnt)[-3:]=='000':
+            if str(cnt)[-len(logStr):]==logStr:
                 print(cnt,line)
             if (cnt >= stopNum) and (stopNum > 0):
                 break
@@ -93,10 +95,28 @@ def word_fre_get(textIn,res_text):
     print('textIn line num: ',cnt)
     print('res_text: ',res_text)
 
+def get_dict_from_text(textIn):
+    res_dict = {}
+    with codecs.open(textIn,'r+','utf-8') as ff:
+        line = ff.readline().strip()
+        while line:
+            spArr = line.split(' ')
+            if len(spArr)>=2:
+                res_dict[spArr[0]] = spArr[1]
+            line = ff.readline().strip()
 
+    print('res_dict=',res_dict)
+    return res_dict
+
+def test_get_dict_from_text():
+    textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/general_withDigitFc-word-fre.txt'
+    get_dict_from_text(textIn)
 
 def test_word_fre_get():
     textIn = '/media/3tk/1-data-bk/ASR-Chi-tar/2-magicRead/TRANS.txt'
+    textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/general_withDigitFc.txt'
+    textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/qaFc.txt'
+    textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/tieba_microBlog_dpdzdpFc.txt'
     res_text = textIn[:-4]+'-word-fre.txt'
     word_fre_get(textIn,res_text)
 
@@ -104,6 +124,5 @@ def test_word_fre_get():
 
 if __name__=='__main__':
     test_word_fre_get()
-    
+    # test_get_dict_from_text()
     sys.exit()
-
