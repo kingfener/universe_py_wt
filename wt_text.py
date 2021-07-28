@@ -9,6 +9,8 @@ import sys,os,time
 import re,codecs,shutil
 from typing import Collection
 
+from utils import *
+
 def symbol_filter(textStrin):
     ''' 
     delete unnormal symbol。删除 异常 符号
@@ -67,6 +69,7 @@ def word_fre_get(textIn,res_text):
     # stopNum = 100
     stopNum = -1
     logStr = '0000'
+    total_line_num = py_wc(textIn)
     # with open(textIn,'r+',encoding='utf-8') as ff:
     with codecs.open(textIn,'r+','utf-8') as ff:
         line = ff.readline().strip()
@@ -88,11 +91,15 @@ def word_fre_get(textIn,res_text):
             if (cnt >= stopNum) and (stopNum > 0):
                 break
             cnt = cnt + 1
-            line = ff.readline().strip()
-
+            try:
+                line = ff.readline().strip()
+            except:
+                break
     write_dict_to_text(word_fre_dict,res_text)
     print('textIn: ',textIn)
-    print('textIn line num: ',cnt)
+    
+    print('total_line_num : ',cnt)
+    print('processed line num: ',cnt)
     print('res_text: ',res_text)
 
 def get_dict_from_text(textIn):
@@ -115,8 +122,8 @@ def test_get_dict_from_text():
 def test_word_fre_get():
     textIn = '/media/3tk/1-data-bk/ASR-Chi-tar/2-magicRead/TRANS.txt'
     textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/general_withDigitFc.txt'
-    textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/qaFc.txt'
-    textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/tieba_microBlog_dpdzdpFc.txt'
+    # textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/qaFc.txt'
+    # textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/tieba_microBlog_dpdzdpFc.txt'
     res_text = textIn[:-4]+'-word-fre.txt'
     word_fre_get(textIn,res_text)
 
@@ -126,3 +133,4 @@ if __name__=='__main__':
     test_word_fre_get()
     # test_get_dict_from_text()
     sys.exit()
+textIn
