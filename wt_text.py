@@ -1,9 +1,9 @@
-#coding=utf-8
+# coding=utf-8
+'''
+    文本 文件处理程序
+    by @wangtao
 '''
 
-this code id for text related processing.
-
-'''
 
 import sys,os,time
 import re,codecs,shutil

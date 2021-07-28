@@ -1,4 +1,8 @@
-
+# coding=utf-8
+'''
+    文字 处理类程序
+    by @wangtao
+'''
 
 import sys
 import os

@@ -1,5 +1,8 @@
-# wt_utils.py
-
+# coding=utf-8
+'''
+    工具类程序
+    by @wangtao
+'''
 
 import os,re,sys,codecs,shutil
 
