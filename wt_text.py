@@ -128,14 +128,15 @@ def test_word_fre_get():
     textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/general_withDigitFc.txt'
     # textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/qaFc.txt'
     # textIn = '/media/U1T/open-ASR/LM-text/text-cleand-sorted/tieba_microBlog_dpdzdpFc.txt'
+    textIn = '/media/3B/data/Txt/全国-地址-文本.txt'
     res_text = textIn[:-4]+'-word-fre.txt'
     word_fre_get(textIn,res_text)
 
-def combine_text_dict():
+def combine_text_dict_1():
     textIn = 'text/general_withDigitFc-word-fre.txt'
     dict1 = get_dict_from_text(textIn)
     textIn = 'text/qaFc-word-fre.txt'
-    dict2 = get_dict_from_text(textIn,100)
+    dict2 = get_dict_from_text(textIn)
     textIn = 'text/tieba_microBlog_dpdzdpFc-word-fre.txt'
     dict3 = get_dict_from_text(textIn)
 
@@ -154,16 +155,39 @@ def combine_text_dict():
             res_dict[key] = int(res_dict[key])+int(value)
         else:
             res_dict[key] = int(value)
-
-
     # return res_dict
     res_text = 'text/cmb-3-dict.txt'
     write_dict_to_text(res_dict,res_text)
     print('textIn=',textIn)
     print('res_text=',res_text)
 
+
+def combine_text_dict():
+    textIn = 'text/cmb-3-dict.txt'
+    dict1 = get_dict_from_text(textIn)
+    textIn = 'text/chiese_address-word-fre.txt'
+    dict2 = get_dict_from_text(textIn)
+
+    res_dict = {}
+    for key,value in dict1.items():
+        res_dict[key] = int(value)
+
+    for key,value in dict2.items():
+        if key in res_dict:
+            res_dict[key] = int(res_dict[key])+int(value)
+        else:
+            res_dict[key] = int(value)
+
+    # return res_dict
+    res_text = 'text/cmb-4-dict.txt'
+    write_dict_to_text(res_dict,res_text)
+    print('textIn=',textIn)
+    print('res_text=',res_text)
+
+
 if __name__=='__main__':
     # test_word_fre_get()
     # test_get_dict_from_text()
+    combine_text_dict_1()
     combine_text_dict()
     sys.exit()
