@@ -102,14 +102,18 @@ def word_fre_get(textIn,res_text):
     print('processed line num: ',cnt)
     print('res_text: ',res_text)
 
-def get_dict_from_text(textIn):
+def get_dict_from_text(textIn,topNum=-1):
     res_dict = {}
+    cnt = 1
     with codecs.open(textIn,'r+','utf-8') as ff:
         line = ff.readline().strip()
         while line:
             spArr = line.split(' ')
             if len(spArr)>=2:
                 res_dict[spArr[0]] = spArr[1]
+            if (cnt > topNum) and (topNum > 0):
+                break
+            cnt = cnt +1
             line = ff.readline().strip()
 
     # print('res_dict=',res_dict)
@@ -131,18 +135,21 @@ def combine_text_dict():
     textIn = 'text/general_withDigitFc-word-fre.txt'
     dict1 = get_dict_from_text(textIn)
     textIn = 'text/qaFc-word-fre.txt'
-    dict2 = get_dict_from_text(textIn)
+    dict2 = get_dict_from_text(textIn,100)
     textIn = 'text/tieba_microBlog_dpdzdpFc-word-fre.txt'
     dict3 = get_dict_from_text(textIn)
 
-    res_dict = copy.deepcopy(dict1)
-    for key,value in dict2:
+    res_dict = {}
+    for key,value in dict1.items():
+        res_dict[key] = int(value)
+
+    for key,value in dict2.items():
         if key in res_dict:
             res_dict[key] = int(res_dict[key])+int(value)
         else:
             res_dict[key] = int(value)
 
-    for key,value in dict3:
+    for key,value in dict3.items():
         if key in res_dict:
             res_dict[key] = int(res_dict[key])+int(value)
         else:
@@ -152,7 +159,8 @@ def combine_text_dict():
     # return res_dict
     res_text = 'text/cmb-3-dict.txt'
     write_dict_to_text(res_dict,res_text)
-
+    print('textIn=',textIn)
+    print('res_text=',res_text)
 
 if __name__=='__main__':
     # test_word_fre_get()
