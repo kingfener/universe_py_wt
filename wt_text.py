@@ -58,7 +58,7 @@ def write_dict_to_text(word_fre_dict,res_text):
 
 def word_fre_get(textIn,res_text):
     '''
-    字典 词频 统计
+    字典 词频 统计import copy
     '''
     fmtStr = re.compile(r'[,、?!@<>&%$#，。？！@#￥%&~《》（）]')
     # fmtStr = re.compile(r'[!]')
@@ -112,7 +112,7 @@ def get_dict_from_text(textIn):
                 res_dict[spArr[0]] = spArr[1]
             line = ff.readline().strip()
 
-    print('res_dict=',res_dict)
+    # print('res_dict=',res_dict)
     return res_dict
 
 def test_get_dict_from_text():
@@ -127,10 +127,35 @@ def test_word_fre_get():
     res_text = textIn[:-4]+'-word-fre.txt'
     word_fre_get(textIn,res_text)
 
+def combine_text_dict():
+    textIn = 'text/general_withDigitFc-word-fre.txt'
+    dict1 = get_dict_from_text(textIn)
+    textIn = 'text/qaFc-word-fre.txt'
+    dict2 = get_dict_from_text(textIn)
+    textIn = 'text/tieba_microBlog_dpdzdpFc-word-fre.txt'
+    dict3 = get_dict_from_text(textIn)
+
+    res_dict = copy.deepcopy(dict1)
+    for key,value in dict2:
+        if key in res_dict:
+            res_dict[key] = int(res_dict[key])+int(value)
+        else:
+            res_dict[key] = int(value)
+
+    for key,value in dict3:
+        if key in res_dict:
+            res_dict[key] = int(res_dict[key])+int(value)
+        else:
+            res_dict[key] = int(value)
+
+
+    # return res_dict
+    res_text = 'text/cmb-3-dict.txt'
+    write_dict_to_text(res_dict,res_text)
 
 
 if __name__=='__main__':
-    test_word_fre_get()
+    # test_word_fre_get()
     # test_get_dict_from_text()
+    combine_text_dict()
     sys.exit()
-textIn

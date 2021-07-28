@@ -4,7 +4,7 @@
 import os,re,sys,codecs,shutil
 
 import subprocess
-
+import copy
 def py_grep(srcTxt, tarStr):
     strcmd = 'grep ' + tarStr + ' ' + srcTxt
     # aa = subprocess.check_output(strcmd,shell=True)
