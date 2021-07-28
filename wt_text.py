@@ -7,10 +7,11 @@ this code id for text related processing.
 
 import sys,os,time
 import re,codecs,shutil
+from typing import Collection
 
 def symbol_filter(textStrin):
     ''' 
-    delete unnormal symbol
+    delete unnormal symbol。删除 异常 符号
     '''
     fmtSym = re.compile(r'[~-%]')
 
@@ -22,23 +23,87 @@ def symbol_filter(textStrin):
 
 
 def chi_eng_sym_check():
-    '''  use for check input strs class '''
+    ''' 
+    use for check input strs class , 中英文 检测
+    
+    '''
 
     pass
 
 
+def del_symble(line):
+    '''
+    删除 文本行 重点 所有符号
+    '''
+    fmtStr = re.compile(r'[,.?!@<>&\*%$#\[\]，。？！@#￥%&-—+~《》（）]')
+    line = re.sub(fmtStr,'',line)
+    return line
+
+def get_word_list(line):
+    word_list = []
+    for char in line:
+        word_list.append(char)
+    return word_list
+def write_dict_to_text(word_fre_dict,res_text):
+    word_fre_dict = sorted(word_fre_dict.items(),  key=lambda d: d[1], reverse=True)
+    cnt = 0
+    with open(res_text,'w+',encoding='utf-8') as ff:
+        for key,value in word_fre_dict:
+            ff.write(str(key)+' '+str(value)+'\n')
+            if str(cnt)[-3:] == '000':
+               ff.flush() 
+            cnt = cnt + 1
+
+def word_fre_get(textIn,res_text):
+    '''
+    字典 词频 统计
+    '''
+    fmtStr = re.compile(r'[,\.、?!@<>&%$#，。？！@#￥%&-—+~《》（）]')
+    fmtStr = re.compile(r'[,.、?!@<>&%$#，。？！@#￥%&—~《》（）\*]')
+
+    # fmtStr = re.compile(r'[？]')
+
+    
+    word_fre_dict = {}
+    cnt = 1
+    # stopNum = 100
+    stopNum = -1
+    with open(textIn,'r+',encoding='utf-8') as ff:
+        line = ff.readline().strip()
+        line = ' '.join(line.split('\t')[2:])
+        while line:
+            line = fmtStr.sub('',line.upper())
+            cur_word_list = get_word_list(line)
+            if len(cur_word_list) == 0:
+                continue
+            for word in cur_word_list:
+                if word not in word_fre_dict:
+                    word_fre_dict[word] = 1
+                else:
+                    word_fre_dict[word] = word_fre_dict[word] + 1
+            if str(cnt)[-3:]=='000':
+                print(cnt,line)
+            if (cnt >= stopNum) and (stopNum > 0):
+                break
+            cnt = cnt + 1
+            line = ff.readline().strip()
+
+    write_dict_to_text(word_fre_dict,res_text)
+    print('textIn: ',textIn)
+    print('textIn line num: ',cnt)
+    print('res_text: ',res_text)
 
 
 
+def test_word_fre_get():
+    textIn = '/media/3tk/1-data-bk/ASR-Chi-tar/2-magicRead/TRANS.txt'
+    res_text = textIn[:-4]+'-word-fre.txt'
+    word_fre_get(textIn,res_text)
 
 
 
-
-
-
-
-
-
-
-
+if __name__=='__main__':
+    test_word_fre_get()
+    
+    sys.exit()
 
