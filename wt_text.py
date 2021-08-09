@@ -10,6 +10,7 @@ import re,codecs,shutil
 from typing import Collection
 
 from utils import *
+from words_chi_eng import *
 
 def symbol_filter(textStrin):
     ''' 
@@ -184,10 +185,61 @@ def combine_text_dict():
     print('textIn=',textIn)
     print('res_text=',res_text)
 
+def text_Fan2Jan_openccpy_test():
 
+    src_text = '/home/king/Desktop/asr/universe_py_wt/text/cmb-4-dict-hand.txt'
+    res_text = src_text[:-4]+'-jianti.txt'
+    cnt = 0
+    word_dct = {}
+    with codecs.open(src_text,'r+','utf-8') as ff :
+        line = ff.readline().strip()
+        while line:
+            new_line1,_,_ = Fan2Jan_openccpy(line)
+            new_line2,_ = Fan2Jan_opencc(line)
+            word,nums = new_line2.split(' ')
+            num = int(nums)
+            if word not in word_dct:
+                word_dct[word] = num
+            else:
+                word_dct[word] =  num if num > word_dct[word] else word_dct[word]
+
+            # if new_line1 == new_line2:
+            #     f_out.write(new_line2+'\n')
+            # else:
+            #     # f_out.write(new_line1+'\n')
+            #     f_out.write(new_line2+'\n')
+
+            cnt +=1
+            if str(cnt)[-3:] == '000':
+                print(cnt,'line     = ',line)   
+                # print(cnt,'new_line1= ',new_line1)   
+                # print(cnt,'new_line2= ',new_line2)            
+
+            line = ff.readline().strip()
+    marklist = sorted(word_dct.items(), key=lambda x:x[1],reverse=True)
+    sort_word_dct = dict(marklist)
+    cnt = 0
+    with codecs.open(res_text,'w+','utf-8') as f_out:
+        for key,value in sort_word_dct.items():
+            new_line2 = key+' '+str(value)
+            f_out.write(new_line2+'\n')
+            cnt +=1
+            if str(cnt)[-3:] == '000':
+                print(cnt,'line     = ',line)   
+                print(cnt,'new_line1= ',new_line1)   
+                print(cnt,'new_line2= ',new_line2)       
+
+    print('src_text ',src_text)
+    print('res_text ',res_text)
+
+    
 if __name__=='__main__':
     # test_word_fre_get()
     # test_get_dict_from_text()
-    combine_text_dict_1()
-    combine_text_dict()
+    # combine_text_dict_1()
+    # combine_text_dict()
+    text_Fan2Jan_openccpy_test()
     sys.exit()
+
+
+

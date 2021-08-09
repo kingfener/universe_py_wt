@@ -178,9 +178,6 @@ def Q2B_test():
     text2 = stringpartQ2B(text)
     print("数字字母全角转半角：", text2, sep="\n", end="\n")
 
-
-
-
 def eng_sentence_split_ZX(strIN,lexicon):
     text_list=[]
     cur_str = fenci_ZXZDPP_(strIN,lexicon)
